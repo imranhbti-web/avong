@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1f2937" />
+  <title>Avon Traders</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Avon Traders</h1>
+      <p>Building Material & Hardware • Campbell Road, Balaganj, Lucknow</p>
+      <p class="phone">PH: <a href="tel:9369553111">9369553111</a></p>
+    </div>
+    <button id="installBtn" class="ghost hidden">Install App</button>
+  </header>
+
+  <main>
+    <section id="backupAlert" class="alert hidden">
+      Weekly backup is due. Export data now and save it in phone/Drive/WhatsApp.
+      <button id="quickBackupBtn">Export Backup</button>
+    </section>
+
+    <section class="hero">
+      <h2>Home Delivery Available</h2>
+      <p>Specialist in all types of Allen Key Bolts, GI Pipes and GI Fittings.</p>
+      <div class="hero-actions">
+        <a class="primary" id="shopWhatsapp" target="_blank" rel="noopener">WhatsApp Shop</a>
+        <button class="secondary" onclick="showTab('quote')">Create Quote</button>
+        <button class="secondary" onclick="showTab('invoice')">Create Invoice</button>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="App sections">
+      <button class="tab active" data-tab="items" onclick="showTab('items')">Items</button>
+      <button class="tab" data-tab="quote" onclick="showTab('quote')">Quote</button>
+      <button class="tab" data-tab="invoice" onclick="showTab('invoice')">Invoice</button>
+      <button class="tab" data-tab="sales" onclick="showTab('sales')">Sales/Due</button>
+      <button class="tab" data-tab="stock" onclick="showTab('stock')">Stock</button>
+      <button class="tab" data-tab="backup" onclick="showTab('backup')">Backup</button>
+    </nav>
+
+    <section id="items" class="panel active">
+      <div class="panel-title">
+        <h2>Quick Price Search & Item Master</h2>
+        <input id="searchInput" placeholder="Search item/rate..." oninput="renderItems()" />
+      </div>
+      <form id="itemForm" class="grid-form">
+        <input id="itemName" placeholder="Item name" required />
+        <input id="itemUnit" placeholder="Unit (pcs/kg/bundle)" required />
+        <input id="buyRate" type="number" step="0.01" placeholder="Wholesale buy rate" required />
+        <input id="sellRate" type="number" step="0.01" placeholder="Selling rate" required />
+        <input id="stockQty" type="number" step="0.01" placeholder="Stock qty" required />
+        <input id="minStock" type="number" step="0.01" placeholder="Min stock trigger" required />
+        <label><input id="featured" type="checkbox" /> Featured</label>
+        <button class="primary" type="submit">Add / Update Item</button>
+      </form>
+      <div id="itemList" class="cards"></div>
+    </section>
+
+    <section id="quote" class="panel">
+      <h2>Rate List / Quote Sharing on WhatsApp</h2>
+      <form id="quoteForm" class="grid-form">
+        <input id="quoteCustomer" placeholder="Customer name" />
+        <input id="quotePhone" placeholder="Customer WhatsApp number" />
+        <select id="quoteItem"></select>
+        <input id="quoteQty" type="number" step="0.01" placeholder="Qty" required />
+        <input id="quoteRate" type="number" step="0.01" placeholder="Rate" required />
+        <button class="primary" type="submit">Add to Quote</button>
+      </form>
+      <div id="quoteLines" class="table-wrap"></div>
+      <div class="actions">
+        <button onclick="shareQuoteWhatsapp()" class="secondary">Share Quote on WhatsApp</button>
+                <button onclick="printDocument('quote')" class="secondary">Print / Save PDF</button>
+        <button onclick="clearQuote()" class="danger">Clear Quote</button>
+      </div>
+    </section>
+
+    <section id="invoice" class="panel">
+      <h2>Invoice Generation & WhatsApp Sharing</h2>
+      <form id="invoiceForm" class="grid-form">
+        <input id="invoiceCustomer" placeholder="Customer name" required />
+        <input id="invoicePhone" placeholder="Customer WhatsApp number" />
+        <select id="invoiceItem"></select>
+        <input id="invoiceQty" type="number" step="0.01" placeholder="Qty" required />
+        <input id="invoiceRate" type="number" step="0.01" placeholder="Rate" required />
+        <input id="paidAmount" type="number" step="0.01" placeholder="Paid amount" />
+        <button class="primary" type="submit">Add Invoice Line</button>
+      </form>
+      <div id="invoiceLines" class="table-wrap"></div>
+      <div class="actions">
+        <button onclick="finalizeSale()" class="primary">Save Sale & Update Stock</button>
+        <button onclick="shareInvoiceWhatsapp()" class="secondary">Share Invoice on WhatsApp</button>
+        <button onclick="printDocument('invoice')" class="secondary">Print / Save PDF</button>
+        <button onclick="clearInvoice()" class="danger">Clear Invoice</button>
+      </div>
+    </section>
+
+    <section id="sales" class="panel">
+      <h2>Selling Record, Balance Due & Reminders</h2>
+      <input id="salesSearch" placeholder="Search customer / item..." oninput="renderSales()" />
+      <div id="salesList" class="cards"></div>
+    </section>
+
+    <section id="stock" class="panel">
+      <h2>Stock Record & Inventory Trigger</h2>
+      <p class="muted">Items at or below minimum stock are shown first.</p>
+      <div id="stockList" class="cards"></div>
+    </section>
+
+    <section id="backup" class="panel">
+      <h2>Weekly Data Backup</h2>
+      <p>Export backup weekly and save the JSON file in phone storage, Google Drive, or WhatsApp to yourself. Import the same file to restore data.</p>
+      <div class="actions">
+        <button id="exportBtn" class="primary">Export Backup JSON</button>
+        <label class="file-label">Import Backup JSON <input id="importFile" type="file" accept="application/json" /></label>
+      </div>
+      <pre id="backupStatus"></pre>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Terms & Conditions:</strong> Items will not be returned after purchase.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
